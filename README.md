@@ -6,7 +6,7 @@ Creates a virtual machine without portsec enabled. If you need a need a counter,
 
 ```
 module "datenverarbeitung" {
-	source = "/home/hw/Projekte/Cyberrange/cr-v2/terraform-modules/openstack-srv_noportsec"
+	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
 	hostname = "datenverarbeitung"
 	tag = "datenverarbeitung"
 	ip_address = "192.168.33.9"
