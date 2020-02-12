@@ -8,7 +8,7 @@ Creates a virtual machine without portsec enabled. If you need a need a counter,
 module "datenverarbeitung" {
 	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
 	hostname = "datenverarbeitung"
-	tag = "datenverarbeitung"
+	tag = "sec-net"
 	ip_address = "192.168.33.9"
         image_id = "${var.image_id}"
         flavor = "${var.flavor}"
