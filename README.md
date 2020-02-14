@@ -10,11 +10,11 @@ module "datenverarbeitung" {
 	hostname = "datenverarbeitung"
 	tag = "sec_net"
 	ip_address = "192.168.33.9"
-        image_id = "${var.image_id}"
-        flavor = "${var.flavor}"
-        sshkey = "${var.sshkey}"
-        lannet_id = "${var.lannet_id}"
-	lansubnet_id = "${var.lansubnet_id}"
+	image_id = var.image_id
+	flavor = var.flavor
+	sshkey = var.sshkey
+	lannet_id = var.lannet_id
+	lansubnet_id = var.lansubnet_id
 	userdatafile = "${path.module}/scripts/default.yml"
 }
 
