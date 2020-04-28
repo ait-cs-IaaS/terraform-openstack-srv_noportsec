@@ -1,6 +1,6 @@
-variable "image_id" {
+variable "image" {
 	type = string
-	description = "image-id to boot the hosts from"
+	description = "name of the image to boot the hosts from"
 }
 
 variable "flavor" {
@@ -15,14 +15,14 @@ variable "sshkey" {
 	default = "cyberrange-key"
 }
 
-variable "lannet_id" {
+variable "lannet" {
 	type = string
-	description = "Local network"
+	description = "Name of the local network"
 }
 
-variable "lansubnet_id" {
+variable "lansubnet" {
 	type = string
-	description = "Local sub-net"
+	description = "Name of the local sub-net"
 }
 
 variable "userdatafile" {

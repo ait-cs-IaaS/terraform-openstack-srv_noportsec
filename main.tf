@@ -5,6 +5,19 @@ terraform {
   backend "consul" {}
 }
 
+data "openstack_networking_network_v2" "lannet" {
+  name = var.lannet
+}
+
+data "openstack_networking_subnet_v2" "lansubnet" {
+  name = var.lansubnet
+}
+
+data "openstack_images_image_v2" "image" {
+  name        = var.image
+  most_recent = true
+}
+
 data "template_file" "user_data" {
   template = file(var.userdatafile)
 }
@@ -32,7 +45,7 @@ resource "openstack_compute_instance_v2" "server" {
   }
 
   block_device {
-    uuid                  = var.image_id
+    uuid                  = data.openstack_images_image_v2.image.id
     source_type           = "image"
     volume_size           = var.volume_size
     boot_index            = 0
@@ -51,10 +64,10 @@ resource "openstack_networking_port_v2" "srvport" {
   no_security_groups = true
   port_security_enabled = false
 
-  network_id = var.lannet_id
+  network_id = data.openstack_networking_network_v2.lannet.id
 
   fixed_ip { 
-      subnet_id = var.lansubnet_id
+      subnet_id = data.openstack_networking_subnet_v2.lansubnet.id
       ip_address = var.ip_address
   }
 }
