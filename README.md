@@ -13,8 +13,8 @@ module "datenverarbeitung" {
 	image_id = var.image_id
 	flavor = var.flavor
 	sshkey = var.sshkey
-	lannet_id = var.lannet_id
-	lansubnet_id = var.lansubnet_id
+	network = var.network
+	subnet = var.subnet
 	userdatafile = "${path.module}/scripts/default.yml"
 }
 

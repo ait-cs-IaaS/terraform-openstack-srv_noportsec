@@ -5,12 +5,12 @@ terraform {
   backend "consul" {}
 }
 
-data "openstack_networking_network_v2" "lannet" {
-  name = var.lannet
+data "openstack_networking_network_v2" "network" {
+  name = var.network
 }
 
-data "openstack_networking_subnet_v2" "lansubnet" {
-  name = var.lansubnet
+data "openstack_networking_subnet_v2" "subnet" {
+  name = var.subnet
 }
 
 data "openstack_images_image_v2" "image" {
@@ -64,10 +64,10 @@ resource "openstack_networking_port_v2" "srvport" {
   no_security_groups = true
   port_security_enabled = false
 
-  network_id = data.openstack_networking_network_v2.lannet.id
+  network_id = data.openstack_networking_network_v2.network.id
 
   fixed_ip { 
-      subnet_id = data.openstack_networking_subnet_v2.lansubnet.id
+      subnet_id = data.openstack_networking_subnet_v2.subnet.id
       ip_address = var.ip_address
   }
 }
