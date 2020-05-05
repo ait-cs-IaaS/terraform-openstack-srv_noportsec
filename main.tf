@@ -20,6 +20,7 @@ data "openstack_images_image_v2" "image" {
 
 data "template_file" "user_data" {
   template = file(var.userdatafile)
+  vars = var.userdata_vars
 }
 
 data "template_cloudinit_config" "cloudinit" {

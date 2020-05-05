@@ -30,6 +30,12 @@ variable "userdatafile" {
 	description = "path to userdata file"
 }
 
+variable "userdata_vars" {
+	type = map(string)
+	description = "variables for the userdata template"
+	default = {}
+}
+
 variable "hostname" {
 	type = string
 	description = "hostname"
