@@ -6,7 +6,7 @@ variable "image" {
 variable "flavor" {
 	type = string
 	description = "instance flavor for the server"
-        default = "m1.small"
+	default = "m1.small"
 }
 
 variable "sshkey" {
@@ -17,7 +17,19 @@ variable "sshkey" {
 
 variable "network" {
 	type = string
-	description = "Name of the local network"
+	description = "Name of the main network"
+}
+
+variable "additional_networks" {
+  type = map(
+	  object({
+		  network = string
+		  subnet = string
+		  ip_address = string
+	  })
+  )
+  description = "Additional networks instances should be connected to"
+  default = {}
 }
 
 variable "subnet" {
@@ -44,6 +56,7 @@ variable "hostname" {
 variable "tag" {
 	type = string
 	description = "group tag"
+	default = null
 }
 
 variable "volume_size" {
@@ -55,4 +68,5 @@ variable "volume_size" {
 variable "ip_address" {
 	type = string
 	description = "fixed ip address"
+	default = null
 }
