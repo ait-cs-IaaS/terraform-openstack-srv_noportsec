@@ -1,6 +1,3 @@
-provider "openstack" {
-}
-
 terraform {
   backend "consul" {}
 }
