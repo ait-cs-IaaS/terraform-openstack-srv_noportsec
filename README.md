@@ -12,9 +12,12 @@ using data sources. UUIDs are identified using a regular expression meaning that
 
 Once disabled all input for the input type (e.g., network) will be considered to be names regardless of the UUID regular expression.
 
-# Configuration 
+**Note that for the image input it is not possible to use outputs from resources to assign a value to the input (e.g., using an image resources and then referencing the resulting id). Doing so will result in an error and planning/applying will only be possible after the referenced resource has been deployed using the terraform `-target`
+option.**
 
-## Simple Instance with fixed ip
+## Configuration V
+
+### Simple Instance with fixed ip
 ```
 module "datenverarbeitung" {
 	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
@@ -31,7 +34,7 @@ module "datenverarbeitung" {
 
 ```
 
-## Dual-Homed Instance Instance
+### Dual-Homed Instance Instance
 ```
 module "datenverarbeitung" {
 	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
@@ -54,7 +57,7 @@ module "datenverarbeitung" {
 }
 ```
 
-## Use network and subnet IDs to configure instance
+### Use network and subnet IDs to configure instance
 
 ```
 module "example" {

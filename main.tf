@@ -1,6 +1,6 @@
-# terraform {
-#   backend "consul" {}
-# }
+terraform {
+  backend "consul" {}
+}
 
 locals {
   # UUID regex used to check if lookup dependencies by name or already have the id
@@ -8,37 +8,34 @@ locals {
 }
 
 data "openstack_networking_network_v2" "network" {
-  count = can(regex(local.is_uuid, var.network)) && var.allow_network_uuid ? 0 : 1
-  name = var.network
+  # load by ID if we got a UUID and by name if not
+  name = can(regex(local.is_uuid, var.network)) && var.allow_network_uuid ? null : var.network
+  network_id = can(regex(local.is_uuid, var.network)) && var.allow_network_uuid ? var.network : null
 }
 
 data "openstack_networking_subnet_v2" "subnet" {
-  # if subnet is given
-  # we need to load subnet info if we need it to calculate instance instance fixed IP addresses (i.e., var.host_address_index != null)
-  # or if we where given a name (i.e., var.subnet is not a regex)
-  count = var.subnet == null || (var.host_address_index == null && can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid) ? 0 : 1
+  # load by ID if we got a UUID and by name if not
   name = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? null : var.subnet
   subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : null
 }
 
 data "openstack_networking_network_v2" "additional_networks" {
-  for_each = {for name, config in var.additional_networks : name => config if !can(regex(local.is_uuid, config.network)) || !var.allow_network_uuid}
-  name = each.value.network
+  for_each = var.additional_networks
+  name = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? null : each.value.network
+  network_id = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? each.value.network : null
 }
 
 data "openstack_networking_subnet_v2" "additional_subnets" {
-  # if subnet is given
-  # we need to load subnet info if we need it to calculate instance instance fixed IP addresses (i.e., var.host_address_index != null)
-  # or if we where given a name (i.e., var.subnet is not a regex)
-  for_each = {for name, config in var.additional_networks : name => config if config.subnet != null && (config.host_address_index != null || !can(regex(local.is_uuid, config.subnet)) || !var.allow_subnet_uuid)}
+  for_each = var.additional_networks
   name = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? null : each.value.subnet
   subnet_id = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? each.value.subnet : null
 }
 
 
 data "openstack_images_image_v2" "image" {
+  # note that this does not work if var.image input is from resource response in the same module
   count = can(regex(local.is_uuid, var.image)) && var.allow_image_uuid ? 0 : 1
-  name        = var.image
+  name = var.image
   most_recent = true
 }
 
@@ -89,14 +86,14 @@ resource "openstack_networking_port_v2" "srvport" {
   no_security_groups = true
   port_security_enabled = false
 
-  network_id = can(regex(local.is_uuid, var.network)) && var.allow_network_uuid ? var.network : data.openstack_networking_network_v2.network[0].id
+  network_id = can(regex(local.is_uuid, var.network)) && var.allow_network_uuid ? var.network : data.openstack_networking_network_v2.network.id
 
   dynamic "fixed_ip" {
       # if var.subnet == null the fixed_ip block will be ommited due to the empty map
       for_each = var.subnet != null ? { srvport = "placeholder"} : {}
       content {
-        subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : data.openstack_networking_subnet_v2.subnet[0].id
-        ip_address = var.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnet[0].cidr, var.host_address_index) : null
+        subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : data.openstack_networking_subnet_v2.subnet.id
+        ip_address = var.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnet.cidr, var.host_address_index) : null
       }
   }
 
