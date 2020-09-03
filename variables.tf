@@ -73,3 +73,19 @@ variable "userdata_vars" {
 	default = {}
 }
 
+# feature flags which can be used to disable UUID checks for image, network and subnet inputs
+variable "allow_network_uuid" {
+	type = bool
+	description = "Enable/Disable inputing uuids instead of names for network and additional_networks.*.network"
+	default = true
+}
+variable "allow_subnet_uuid" {
+	type = bool
+	description = "Enable/Disable inputing uuids instead of names for subnet and additional_networks.*.subnet"
+	default = true
+}
+variable "allow_image_uuid" {
+	type = bool
+	description = "Enable/Disable inputing uuids instead of names for image"
+	default = true
+}
