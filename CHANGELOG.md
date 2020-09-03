@@ -3,6 +3,7 @@
 ## v1.3
 
  - Also allow input of UUIDs instead of names for network, subnet and image based on a UUID regular expression
+ - Replace static IP address input with dynamically calculated fixed IP addresses based on subnet cidr and host address index input
 
 ## v1.2.1
 

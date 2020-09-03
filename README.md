@@ -14,13 +14,13 @@ Once disabled all input for the input type (e.g., network) will be considered to
 
 # Configuration 
 
-## Simple Instance
+## Simple Instance with fixed ip
 ```
 module "datenverarbeitung" {
 	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
 	hostname = "datenverarbeitung"
 	tag = "sec_net"
-	ip_address = "192.168.33.9"
+	host_address_index = 150
 	image = var.image
 	flavor = var.flavor
 	sshkey = var.sshkey
@@ -42,13 +42,13 @@ module "datenverarbeitung" {
 	sshkey = var.sshkey
 	network = var.network
 	subnet = var.subnet
-	ip_address = var.ip_address
+	host_address_index = var.host_address_index
 	userdatafile = "${path.module}/scripts/default.yml"
 	additional_networks = {
 		second_network = {
 			network = var.network_2
 			subnet = var.subnet_2
-			ip_address = var.ip_address2
+			host_address_index = var.host_address_index2
 		}
 	}
 }
@@ -60,7 +60,7 @@ module "datenverarbeitung" {
 module "example" {
 	source = "git@git-service.ait.ac.at:sct-cyberrange/terraform-modules/openstack-srv_noportsec.git"
 	hostname = "example"
-	ip_address = null
+	host_address_index = null
 	image = var.image
 	flavor = var.flavor
 	sshkey = var.sshkey
@@ -71,13 +71,13 @@ module "example" {
 		id_input = {
 			network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
 			subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"
-			ip_address = null
+			host_address_index = null
 		}
 
 		name_input = {
 			network = "cyberrange-public"
 			subnet = "cyberrange-public-4"
-			ip_address = null
+			host_address_index = null
 		}
 	}
 }

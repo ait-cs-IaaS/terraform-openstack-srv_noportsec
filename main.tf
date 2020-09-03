@@ -13,8 +13,11 @@ data "openstack_networking_network_v2" "network" {
 }
 
 data "openstack_networking_subnet_v2" "subnet" {
-  count = can(regex(local.is_uuid, var.subnet))  && var.allow_subnet_uuid ? 0 : 1
-  name = var.subnet
+  # we need to load subnet info if we need it to calculate instance instance fixed IP addresses (i.e., var.host_address_index != null)
+  # or if we where given a name (i.e., var.subnet is not a regex)
+  count = var.host_address_index == null && can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? 0 : 1
+  name = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? null : var.subnet
+  subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : null
 }
 
 data "openstack_networking_network_v2" "additional_networks" {
@@ -23,8 +26,11 @@ data "openstack_networking_network_v2" "additional_networks" {
 }
 
 data "openstack_networking_subnet_v2" "additional_subnets" {
-  for_each = {for name, config in var.additional_networks : name => config if !can(regex(local.is_uuid, config.subnet)) || !var.allow_subnet_uuid}
-  name = each.value.subnet
+  # we need to load subnet info if we need it to calculate instance instance fixed IP addresses (i.e., var.host_address_index != null)
+  # or if we where given a name (i.e., var.subnet is not a regex)
+  for_each = {for name, config in var.additional_networks : name => config if config.host_address_index != null || !can(regex(local.is_uuid, config.subnet)) || !var.allow_subnet_uuid}
+  name = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? null : each.value.subnet
+  subnet_id = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? each.value.subnet : null
 }
 
 data "openstack_images_image_v2" "image" {
@@ -84,7 +90,7 @@ resource "openstack_networking_port_v2" "srvport" {
 
   fixed_ip {
       subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : data.openstack_networking_subnet_v2.subnet[0].id 
-      ip_address = var.ip_address
+      ip_address = var.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnet[0].cidr, var.host_address_index) : null
   }
 
 }
@@ -100,7 +106,7 @@ resource "openstack_networking_port_v2" "additional_port" {
 
   fixed_ip {
       subnet_id = can(regex(local.is_uuid, each.value.subnet )) && var.allow_subnet_uuid ? each.value.subnet : data.openstack_networking_subnet_v2.additional_subnets[each.key].id
-      ip_address = each.value.ip_address
+      ip_address = each.value.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.additional_subnets[each.key].cidr, each.value.host_address_index) : null
   }
 }
 

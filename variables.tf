@@ -42,9 +42,9 @@ variable "subnet" {
 	description = "Name or id of the local sub-net"
 }
 
-variable "ip_address" {
-	type = string
-	description = "fixed ip address"
+variable "host_address_index" {
+	type = number
+	description = "The host address index within the subnet the instances IP address will be assigned from"
 	default = null
 }
 
@@ -55,7 +55,7 @@ variable "additional_networks" {
 	  object({
 		  network = string 
 		  subnet = string
-		  ip_address = string
+		  host_address_index = number
 	  })
   )
   description = "Additional networks instances should be connected to"
