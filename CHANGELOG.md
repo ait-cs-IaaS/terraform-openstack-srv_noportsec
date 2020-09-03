@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3
+
+ - Also allow input of UUIDs instead of names for network, subnet and image based on a UUID regular expression
+
 ## v1.2.1
 
 - Add server and network info outputs
