@@ -40,6 +40,7 @@ variable "network" {
 variable "subnet" {
 	type = string
 	description = "Name or id of the local sub-net"
+	default = null
 }
 
 variable "host_address_index" {
