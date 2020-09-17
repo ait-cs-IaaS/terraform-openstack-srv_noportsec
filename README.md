@@ -26,6 +26,7 @@ module "datenverarbeitung" {
 	host_address_index = 150
 	image = var.image
 	flavor = var.flavor
+	config_drive = var.config_drive
 	sshkey = var.sshkey
 	network = var.network
 	subnet = var.subnet
@@ -42,6 +43,7 @@ module "datenverarbeitung" {
 	tag = "sec_net"
 	image = var.image
 	flavor = var.flavor
+	config_drive = var.config_drive
 	sshkey = var.sshkey
 	network = var.network
 	subnet = var.subnet
@@ -66,6 +68,7 @@ module "example" {
 	host_address_index = null
 	image = var.image
 	flavor = var.flavor
+	config_drive = var.config_drive
 	sshkey = var.sshkey
 	network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
 	subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"

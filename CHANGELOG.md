@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.1
+
+ - Hotfix add confid_drive input var to support user data for situations where early networking is not available
+
 ## v1.3
 
  - Also allow input of UUIDs instead of names for network, subnet and image based on a UUID regular expression

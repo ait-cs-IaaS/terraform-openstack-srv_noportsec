@@ -1,91 +1,97 @@
 variable "image" {
-	type = string
-	description = "name or id of the image to boot the hosts from"
+  type        = string
+  description = "name or id of the image to boot the hosts from"
 }
 
 variable "flavor" {
-	type = string
-	description = "instance flavor for the server"
-	default = "m1.small"
+  type        = string
+  description = "instance flavor for the server"
+  default     = "m1.small"
 }
 
 variable "volume_size" {
-	type = string
-	description = "volume_size"
-	default = 5
+  type        = string
+  description = "volume_size"
+  default     = 5
+}
+
+variable "config_drive" {
+  type        = bool
+  description = "Use a config drive to load initial configuration instead of using the network based metadata service"
+  default     = false
 }
 
 variable "sshkey" {
-	type = string
-        description = "ssh key for the server"
-	default = "cyberrange-key"
+  type        = string
+  description = "ssh key for the server"
+  default     = "cyberrange-key"
 }
 
 variable "tag" {
-	type = string
-	description = "group tag"
-	default = null
+  type        = string
+  description = "group tag"
+  default     = null
 }
 
 variable "hostname" {
-	type = string
-	description = "hostname"
+  type        = string
+  description = "hostname"
 }
 
 variable "network" {
-	type = string
-	description = "Name or id of the main network"
+  type        = string
+  description = "Name or id of the main network"
 }
 
 variable "subnet" {
-	type = string
-	description = "Name or id of the local sub-net"
+  type        = string
+  description = "Name or id of the local sub-net"
 }
 
 variable "host_address_index" {
-	type = number
-	description = "The host address index within the subnet the instances IP address will be assigned from"
-	default = null
+  type        = number
+  description = "The host address index within the subnet the instances IP address will be assigned from"
+  default     = null
 }
 
 # the attributes in the additional_networks map behave the same as their default network counter parts 
 # (e.g., network can be either the name or id)
-variable "additional_networks" { 
+variable "additional_networks" {
   type = map(
-	  object({
-		  network = string 
-		  subnet = string
-		  host_address_index = number
-	  })
+    object({
+      network            = string
+      subnet             = string
+      host_address_index = number
+    })
   )
   description = "Additional networks instances should be connected to"
-  default = {}
+  default     = {}
 }
 
 variable "userdatafile" {
-	type = string
-	description = "path to userdata file"
+  type        = string
+  description = "path to userdata file"
 }
 
 variable "userdata_vars" {
-	type = map(string)
-	description = "variables for the userdata template"
-	default = {}
+  type        = map(string)
+  description = "variables for the userdata template"
+  default     = {}
 }
 
 # feature flags which can be used to disable UUID checks for image, network and subnet inputs
 variable "allow_network_uuid" {
-	type = bool
-	description = "Enable/Disable inputing uuids instead of names for network and additional_networks.*.network"
-	default = true
+  type        = bool
+  description = "Enable/Disable inputing uuids instead of names for network and additional_networks.*.network"
+  default     = true
 }
 variable "allow_subnet_uuid" {
-	type = bool
-	description = "Enable/Disable inputing uuids instead of names for subnet and additional_networks.*.subnet"
-	default = true
+  type        = bool
+  description = "Enable/Disable inputing uuids instead of names for subnet and additional_networks.*.subnet"
+  default     = true
 }
 variable "allow_image_uuid" {
-	type = bool
-	description = "Enable/Disable inputing uuids instead of names for image"
-	default = true
+  type        = bool
+  description = "Enable/Disable inputing uuids instead of names for image"
+  default     = true
 }
