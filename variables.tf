@@ -71,6 +71,7 @@ variable "additional_networks" {
 variable "userdatafile" {
   type        = string
   description = "path to userdata file"
+  default     = null 
 }
 
 variable "userdata_vars" {

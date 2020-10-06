@@ -40,18 +40,20 @@ data "openstack_images_image_v2" "image" {
 }
 
 data "template_file" "user_data" {
+  count    = var.userdatafile == null ? 0 : 1
   template = file(var.userdatafile)
   vars     = var.userdata_vars
 }
 
 data "template_cloudinit_config" "cloudinit" {
+  count         = var.userdatafile == null ? 0 : 1
   gzip          = false
   base64_encode = false
 
   part {
     filename     = "init.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.user_data.rendered
+    content      = data.template_file.user_data[0].rendered
   }
 }
 
@@ -60,7 +62,7 @@ resource "openstack_compute_instance_v2" "server" {
   flavor_name = var.flavor
   key_pair    = var.sshkey
 
-  user_data    = data.template_cloudinit_config.cloudinit.rendered
+  user_data    = var.userdatafile == null ? null : data.template_cloudinit_config.cloudinit[0].rendered
   config_drive = var.config_drive
 
   metadata = {

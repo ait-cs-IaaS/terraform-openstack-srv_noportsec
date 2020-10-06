@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.2
+
+ - Make userdata file input optional
+
 ## v1.3.1
 
  - Hotfix add confid_drive input var to support user data for situations where early networking is not available
