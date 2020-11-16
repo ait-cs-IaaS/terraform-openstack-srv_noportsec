@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4
+
+ - Add support for configuring block storage type (volume or local file).
+   Defaults to local file
+
 ## v1.3.2
 
  - Make userdata file input optional
