@@ -1,6 +1,6 @@
-terraform {
-  backend "consul" {}
-}
+# terraform {
+#   backend "consul" {}
+# }
 
 locals {
   # UUID regex used to check if lookup dependencies by name or already have the id
@@ -74,7 +74,7 @@ resource "openstack_compute_instance_v2" "server" {
     source_type           = "image"
     volume_size           = var.volume_size
     boot_index            = 0
-    destination_type      = "volume"
+    destination_type      = var.use_volume ? "volume" : "local"
     delete_on_termination = true
   }
 
