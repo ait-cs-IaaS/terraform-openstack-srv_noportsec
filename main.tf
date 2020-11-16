@@ -61,6 +61,7 @@ resource "openstack_compute_instance_v2" "server" {
   name        = var.hostname
   flavor_name = var.flavor
   key_pair    = var.sshkey
+  image_id    = can(regex(local.is_uuid, var.image)) && var.allow_image_uuid ? var.image : data.openstack_images_image_v2.image[0].id
 
   user_data    = var.userdatafile == null ? null : data.template_cloudinit_config.cloudinit[0].rendered
   config_drive = var.config_drive
