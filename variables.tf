@@ -71,7 +71,7 @@ variable "additional_networks" {
 variable "userdatafile" {
   type        = string
   description = "path to userdata file"
-  default     = null 
+  default     = null
 }
 
 variable "userdata_vars" {
@@ -95,4 +95,10 @@ variable "allow_image_uuid" {
   type        = bool
   description = "Enable/Disable inputing uuids instead of names for image"
   default     = true
+}
+
+variable "use_volume" {
+  type        = bool
+  description = "If the a volume or a local file should be used for storage"
+  default     = false
 }
