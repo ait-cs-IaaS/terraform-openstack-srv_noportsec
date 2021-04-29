@@ -1,5 +1,6 @@
 output "server" {
-  value = openstack_compute_instance_v2.server
+  value     = openstack_compute_instance_v2.server
+  sensitive = true
 }
 
 output "additional_networks" {
