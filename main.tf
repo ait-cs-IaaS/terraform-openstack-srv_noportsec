@@ -1,7 +1,3 @@
-# terraform {
-#   backend "consul" {}
-# }
-
 locals {
   # UUID regex used to check if lookup dependencies by name or already have the id
   is_uuid = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}"
@@ -39,12 +35,6 @@ data "openstack_images_image_v2" "image" {
   most_recent = true
 }
 
-data "template_file" "user_data" {
-  count    = var.userdatafile == null ? 0 : 1
-  template = file(var.userdatafile)
-  vars     = var.userdata_vars
-}
-
 data "template_cloudinit_config" "cloudinit" {
   count         = var.userdatafile == null ? 0 : 1
   gzip          = false
@@ -53,7 +43,7 @@ data "template_cloudinit_config" "cloudinit" {
   part {
     filename     = "init.cfg"
     content_type = "text/cloud-config"
-    content      = data.template_file.user_data[0].rendered
+    content      = templatefile(var.userdatafile, var.userdata_vars)
   }
 }
 
