@@ -75,7 +75,7 @@ variable "userdatafile" {
 }
 
 variable "userdata_vars" {
-  type        = map(string)
+  type        = any
   description = "variables for the userdata template"
   default     = {}
 }
