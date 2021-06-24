@@ -1,5 +1,10 @@
 # Changelog
 
+# v1.4.2
+  - Replace deprecated template_file data source usage with templatefile function
+  - Remove userdata_vars input restriction
+# v1.4.1
+  - Add sensitive flag to server output
 ## v1.4
 
  - Add support for configuring block storage type (volume or local file).
