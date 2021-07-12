@@ -33,6 +33,12 @@ variable "tag" {
   default     = null
 }
 
+variable "metadata" {
+  type        = map(string)
+  description = "The metadata values to assign to the instance"
+  default     = {}
+}
+
 variable "hostname" {
   type        = string
   description = "hostname"
