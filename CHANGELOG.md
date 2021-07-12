@@ -1,5 +1,9 @@
 # Changelog
 
+# v1.4.3
+  - Move to github
+  - Add additional metadata input to support passing complex information to instances (and Ansible) through terraform.
+    Note that "groups" key is reserved and will be overwritten by the `tags` input variable which is used to define inventory groups.
 # v1.4.2
   - Replace deprecated template_file data source usage with templatefile function
   - Remove userdata_vars input restriction
