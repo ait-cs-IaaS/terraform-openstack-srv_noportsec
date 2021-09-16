@@ -108,3 +108,21 @@ variable "use_volume" {
   description = "If the a volume or a local file should be used for storage"
   default     = false
 }
+
+variable "network_access" {
+  type        = bool
+  description = "If the main network should be the access_network"
+  default     = false
+}
+
+variable "ext_networks" {
+  type        = set(
+    object({
+      name    = string
+      access  = bool
+    })
+  )
+  description = "External Network Host is Connected to"
+  default     = []
+}
+
