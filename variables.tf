@@ -60,8 +60,27 @@ variable "host_address_index" {
   default     = null
 }
 
-# the attributes in the additional_networks map behave the same as their default network counter parts 
+variable "network_access" {
+  type        = bool
+  description = "If the main network should be the access_network"
+  default     = false
+}
+
+# the attributes in the networks and additional_networks maps behave the same as their default network counter parts 
 # (e.g., network can be either the name or id)
+variable "networks" {
+  type = map(
+    object({
+      network            = string
+      subnet             = string
+      host_address_index = number
+      access             = bool
+    })
+  )
+  description = "Networks the instance should be created with"
+  default     = {}
+}
+
 variable "additional_networks" {
   type = map(
     object({
@@ -70,7 +89,7 @@ variable "additional_networks" {
       host_address_index = number
     })
   )
-  description = "Additional networks instances should be connected to"
+  description = "Additional networks that should be attached to the instance"
   default     = {}
 }
 
@@ -108,21 +127,3 @@ variable "use_volume" {
   description = "If the a volume or a local file should be used for storage"
   default     = false
 }
-
-variable "network_access" {
-  type        = bool
-  description = "If the main network should be the access_network"
-  default     = false
-}
-
-variable "ext_networks" {
-  type        = set(
-    object({
-      name    = string
-      access  = bool
-    })
-  )
-  description = "External Network Host is Connected to"
-  default     = []
-}
-

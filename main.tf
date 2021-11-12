@@ -15,6 +15,18 @@ data "openstack_networking_subnet_v2" "subnet" {
   subnet_id = can(regex(local.is_uuid, var.subnet)) && var.allow_subnet_uuid ? var.subnet : null
 }
 
+data "openstack_networking_network_v2" "networks" {
+  for_each   = var.networks
+  name       = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? null : each.value.network
+  network_id = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? each.value.network : null
+}
+
+data "openstack_networking_subnet_v2" "subnets" {
+  for_each  = var.networks
+  name      = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? null : each.value.subnet
+  subnet_id = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? each.value.subnet : null
+}
+
 data "openstack_networking_network_v2" "additional_networks" {
   for_each   = var.additional_networks
   name       = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? null : each.value.network
@@ -73,16 +85,17 @@ resource "openstack_compute_instance_v2" "server" {
     delete_on_termination = true
   }
 
-  dynamic "network" {
-    for_each = var.ext_networks
-    content {
-      name           = network.value.name
-      access_network = network.value.access
-    }
-  }
   network {
     port           = openstack_networking_port_v2.srvport.id
-    access_network = length(var.ext_networks) > 0 ? var.network_access : true
+    access_network = length(var.networks) > 0 ? var.network_access : true
+  }
+
+  dynamic "network" {
+    for_each = var.networks
+    content {
+      port           = openstack_networking_port_v2.ports[network.key].id
+      access_network = network.value.access
+    }
   }
 
 }
@@ -105,6 +118,26 @@ resource "openstack_networking_port_v2" "srvport" {
   }
 
 }
+
+resource "openstack_networking_port_v2" "ports" {
+  for_each              = var.networks
+  name                  = "${var.hostname}_${each.key}_net-port"
+  admin_state_up        = "true"
+  no_security_groups    = true
+  port_security_enabled = false
+
+  network_id = can(regex(local.is_uuid, each.value.network)) && var.allow_network_uuid ? each.value.network : data.openstack_networking_network_v2.networks[each.key].id
+
+  dynamic "fixed_ip" {
+    # if each.value.subnet == null the fixed_ip block will be ommited due to the empty map
+    for_each = each.value.subnet != null ? { "fixed_ip_block_${each.key}" = "placeholder " } : {}
+    content {
+      subnet_id  = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? each.value.subnet : data.openstack_networking_subnet_v2.subnets[each.key].id
+      ip_address = each.value.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnets[each.key].cidr, each.value.host_address_index) : null
+    }
+  }
+}
+
 # create the ports for additional networks
 resource "openstack_networking_port_v2" "additional_port" {
   for_each              = var.additional_networks
