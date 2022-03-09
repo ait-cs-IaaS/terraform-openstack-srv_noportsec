@@ -1,4 +1,13 @@
 # Changelog
+
+# v1.5.0
+
+  - Remove `ext_nets` option for "name" only external networks
+  - Add `networks` input var mirroring `additional_networks`,
+    but adding ports as part of instance instead of attaching them.
+    Also has an additional config field `access` for setting the `access_network` value.
+  - Add `networks` output containing all ports created based on the `networks` input var
+    (same as the `additional_networks` output).
 # v1.4.4
   - Add ext_nets variable to assign an external network via dynmaic block
 
