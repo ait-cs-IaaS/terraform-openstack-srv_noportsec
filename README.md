@@ -6,9 +6,9 @@ This module allows you to input image, network and subnet (including as part of 
 either as name or UUIDs. UUIDs will be used directly as input for the underlying resources and names will first be resolved to UUIDs
 using data sources. UUIDs are identified using a regular expression meaning that names which are UUID strings will not be recognized as names. This feature can be disabled using by setting the following boolean flags to `false`:
 
- - `allow_network_uuid`
- - `allow_subnet_uuid`
- - `allow_image_uuid`
+- `allow_network_uuid`
+- `allow_subnet_uuid`
+- `allow_image_uuid`
 
 Once disabled all input for the input type (e.g., network) will be considered to be names regardless of the UUID regular expression.
 
@@ -27,7 +27,8 @@ option.**
 ## Configuration
 
 ### Simple Instance with fixed ip
-```
+
+```terraform
 module "datenverarbeitung" {
   source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
   hostname = "datenverarbeitung"
@@ -45,7 +46,8 @@ module "datenverarbeitung" {
 ```
 
 ### Dual-Homed Instance Instance
-```
+
+```terraform
 module "datenverarbeitung" {
   source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
   hostname = "datenverarbeitung"
@@ -71,7 +73,7 @@ module "datenverarbeitung" {
 
 ### Use network and subnet IDs to configure instance
 
-```
+```terraform
 module "example" {
   source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
   hostname = "example"
@@ -103,7 +105,7 @@ module "example" {
 
 ### Use both networks and additional_networks
 
-```
+```terraform
 module "example" {
   source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
   hostname = "example"
@@ -132,4 +134,3 @@ module "example" {
   }
 }
 ```
-

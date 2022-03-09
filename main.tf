@@ -116,7 +116,6 @@ resource "openstack_networking_port_v2" "srvport" {
       ip_address = var.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnet.cidr, var.host_address_index) : null
     }
   }
-
 }
 
 resource "openstack_networking_port_v2" "ports" {
@@ -130,7 +129,7 @@ resource "openstack_networking_port_v2" "ports" {
 
   dynamic "fixed_ip" {
     # if each.value.subnet == null the fixed_ip block will be ommited due to the empty map
-    for_each = each.value.subnet != null ? { "fixed_ip_block_${each.key}" = "placeholder " } : {}
+    for_each = each.value.subnet != null ? { "fixed_ip_block_${each.key}" = "placeholder" } : {}
     content {
       subnet_id  = can(regex(local.is_uuid, each.value.subnet)) && var.allow_subnet_uuid ? each.value.subnet : data.openstack_networking_subnet_v2.subnets[each.key].id
       ip_address = each.value.host_address_index != null ? cidrhost(data.openstack_networking_subnet_v2.subnets[each.key].cidr, each.value.host_address_index) : null
