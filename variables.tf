@@ -66,7 +66,7 @@ variable "network_access" {
   default     = false
 }
 
-# the attributes in the networks and additional_networks maps behave the same as their default network counter parts 
+# the attributes in the networks and additional_networks maps behave the same as their default network counter parts
 # (e.g., network can be either the name or id)
 variable "networks" {
   type = map(
@@ -125,5 +125,11 @@ variable "allow_image_uuid" {
 variable "use_volume" {
   type        = bool
   description = "If the a volume or a local file should be used for storage"
+  default     = false
+}
+
+variable "extnet" {
+  type        = bool
+  description = "Network is an external network that does not allow port creation"
   default     = false
 }
