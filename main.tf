@@ -85,12 +85,9 @@ resource "openstack_compute_instance_v2" "server" {
     delete_on_termination = true
   }
 
-  dynamic "network" {
-    for_each = openstack_networking_port_v2.srvport
-    content {
-      port           = openstack_networking_port_v2.srvport.id
-      access_network = length(var.networks) > 0 ? var.network_access : true
-    }
+  network {
+    port           = length(openstack_networking_port_v2.srvport) > 0 ? openstack_networking_port_v2.srvport[0].id : var.network
+    access_network = length(var.networks) > 0 ? var.network_access : true
   }
 
   dynamic "network" {
