@@ -86,7 +86,9 @@ resource "openstack_compute_instance_v2" "server" {
   }
 
   network {
-    port           = openstack_networking_port_v2.srvport.id
+    port           = length(openstack_networking_port_v2.srvport) > 0 ? openstack_networking_port_v2.srvport[0].id : null
+    name           = can(regex(local.is_uuid, var.network)) ? null : (var.extnet ? var.network : null)
+    uuid           = can(regex(local.is_uuid, var.network)) ? (var.extnet ? var.network : null) : null
     access_network = length(var.networks) > 0 ? var.network_access : true
   }
 
@@ -97,10 +99,10 @@ resource "openstack_compute_instance_v2" "server" {
       access_network = network.value.access
     }
   }
-
 }
 
 resource "openstack_networking_port_v2" "srvport" {
+  count                 = var.extnet ? 0 : 1
   name                  = "${var.hostname}-port"
   admin_state_up        = "true"
   no_security_groups    = true
