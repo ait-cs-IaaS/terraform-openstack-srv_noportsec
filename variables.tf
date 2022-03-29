@@ -133,3 +133,9 @@ variable "extnet" {
   description = "Network is an external network that does not allow port creation"
   default     = false
 }
+
+variable "security_groups" {
+  type        = list(any)
+  description = "List of security groups if extnet"
+  default     = null
+}

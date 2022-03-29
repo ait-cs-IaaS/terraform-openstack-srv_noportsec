@@ -74,7 +74,8 @@ resource "openstack_compute_instance_v2" "server" {
   user_data    = var.userdatafile == null ? null : data.template_cloudinit_config.cloudinit[0].rendered
   config_drive = var.config_drive
 
-  metadata = merge(local.metadata, local.groups)
+  metadata        = merge(local.metadata, local.groups)
+  security_groups = var.security_groups
 
   block_device {
     uuid                  = can(regex(local.is_uuid, var.image)) && var.allow_image_uuid ? var.image : data.openstack_images_image_v2.image[0].id
@@ -90,6 +91,7 @@ resource "openstack_compute_instance_v2" "server" {
     name           = can(regex(local.is_uuid, var.network)) ? null : (var.extnet ? var.network : null)
     uuid           = can(regex(local.is_uuid, var.network)) ? (var.extnet ? var.network : null) : null
     access_network = length(var.networks) > 0 ? var.network_access : true
+    fixed_ip_v4    = var.host_address_index != null && var.extnet ? cidrhost(data.openstack_networking_subnet_v2.subnet.cidr, var.host_address_index) : null
   }
 
   dynamic "network" {
