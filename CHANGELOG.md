@@ -1,5 +1,8 @@
 # Changelog
 
+# v2.0.0
+  - Fundamentally change the code to remove complexity and adapt the code to meet the new requirements.
+
 # v1.5.0
 
   - Remove `ext_nets` option for "name" only external networks

@@ -1,0 +1,52 @@
+#cloud-config
+system_info:
+  default_user:
+    system: true
+    name: ait
+    plain_text_passwd: mozart.rocks!
+    lock_passwd: False
+write_files:
+  -   content: |
+        #!/bin/bash
+
+        NETPLAN="/etc/netplan/50-cloud-init.yaml"
+
+        MAINIF=`ip link show | grep UP | grep -v LOOPBACK | awk '{print $2}' | rev | cut -c 2- | rev | head -n 1`
+        MAINMAC=`cat /sys/class/net/$MAINIF/address`
+
+        function printnetconfig()
+        {
+          echo "            match:"
+          echo "                macaddress: '$1'"
+          echo "            dhcp4: true"
+          echo "            dhcp4-overrides:"
+          echo "                use-routes: false"
+          echo "                use-domains: false"
+        }
+
+        echo "network:" > $NETPLAN
+        echo "    ethernets:" >> $NETPLAN
+        echo "        $MAINIF:" >> $NETPLAN
+        echo "            dhcp4: true" >> $NETPLAN
+        echo "            dhcp4-overrides:" >> $NETPLAN
+        echo "                use-domains: false" >> $NETPLAN
+        echo "            match:" >> $NETPLAN
+        echo "                macaddress: '$MAINMAC'" >> $NETPLAN
+        for IF in `ip link show | grep mtu | grep -v LOOPBACK | grep -v "$MAINIF" | awk '{print $2}' | rev | cut -c 2- | rev`
+        do
+        echo "        $IF:" >> $NETPLAN
+        printnetconfig $(cat /sys/class/net/$IF/address) >> $NETPLAN
+        done
+        echo "    version: 2" >> $NETPLAN
+
+        echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+
+        /usr/sbin/netplan apply
+      owner: root:root
+      path: /root/ifsetup.sh
+      permissions: '0700'
+runcmd:
+  - [chown, -R, ait, /home/ait]
+  - [chgrp, -R, ait, /home/ait]
+  - [userdel, -r, ubuntu]
+  - [ /root/ifsetup.sh ]

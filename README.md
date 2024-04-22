@@ -1,5 +1,7 @@
 # Terraform: terraform-openstack-srv_noportsec
 
+## TODO: CHECK THE FOLLOWING DESCRIPTION
+
 Creates a virtual machine without portsec enabled. If you need a need a counter, please use "[terraform-openstack-srv_noportsec-count](https://github.com/ait-cs-IaaS/terraform-openstack-srv_noportsec-count)" instead.
 
 This module allows you to input image, network and subnet (including as part of the networks and additional_networks maps) configurations
@@ -25,6 +27,8 @@ online in the operating system layer and configuring them must be handled separa
 option.**
 
 ## Configuration
+
+### TODO: ADD NEW CONFIGURATION EXAMPLES
 
 ### Simple Instance with fixed ip
 
@@ -66,70 +70,6 @@ module "datenverarbeitung" {
       subnet = var.subnet_2
       host_address_index = var.host_address_index2
       access = null
-    }
-  }
-}
-```
-
-### Use network and subnet IDs to configure instance
-
-```terraform
-module "example" {
-  source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
-  hostname = "example"
-  host_address_index = null
-  image = var.image
-  flavor = var.flavor
-  config_drive = var.config_drive
-  sshkey = var.sshkey
-  network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
-  subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"
-  userdatafile = "${path.module}/scripts/default.yml"
-  networks = {
-    id_input = {
-      network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
-      subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"
-      host_address_index = null
-      access = null
-    }
-
-    name_input = {
-      network = "cyberrange-public"
-      subnet = "cyberrange-public-4"
-      host_address_index = null
-      access = null
-    }
-  }
-}
-```
-
-### Use both networks and additional_networks
-
-```terraform
-module "example" {
-  source = "git@github.com:ait-cs-IaaS/terraform-openstack-srv_noportsec.git"
-  hostname = "example"
-  host_address_index = null
-  image = var.image
-  flavor = var.flavor
-  config_drive = var.config_drive
-  sshkey = var.sshkey
-  network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
-  subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"
-  userdatafile = "${path.module}/scripts/default.yml"
-  networks = {
-    id_input = {
-      network = "62e04be3-641f-4abe-88d6-87f397a31d7e"
-      subnet = "a4c9f461-7c1e-4666-8d0f-4f0ae6404483"
-      host_address_index = null
-      access = null
-    }
-  }
-  additional_networks = {
-    name_input = {
-      network = "cyberrange-public"
-      subnet = "cyberrange-public-4"
-      host_address_index = null
     }
   }
 }
