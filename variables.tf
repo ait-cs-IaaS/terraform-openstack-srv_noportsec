@@ -38,3 +38,8 @@ variable "metadata_groups" {
   type = string
   default = ""
 }
+
+variable "metadata_company_info" {
+  type = string
+  default = ""
+}

@@ -33,7 +33,7 @@ resource "openstack_compute_instance_v2" "server" {
   key_pair          = "cyberrange-key" # it should always be the same (I think there is no need to make that dynamic - 10/04/2024)
   security_groups   = []
   user_data         = var.userdata == null ? file("${path.module}/scripts/default.yml") : var.userdata # if no userdata is passed, use the default-file, otherwise use the passed userdata
-  metadata          = { groups = var.metadata_groups }
+  metadata          = local.metadata
 
   # Assign instance to parent network port
   network { port = openstack_networking_port_v2.port.id }
