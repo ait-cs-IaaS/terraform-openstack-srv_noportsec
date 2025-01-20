@@ -6,7 +6,7 @@ resource "openstack_networking_port_v2" "port" {
   port_security_enabled = false # default?
   dynamic "fixed_ip" {
     for_each = var.assign_fixed_ip ? [1] : []
-    content = {
+    content {
       subnet_id  = var.subnet_id
       ip_address = cidrhost(var.cidr, var.host_index)
     }
@@ -23,7 +23,7 @@ resource "openstack_networking_port_v2" "ports" {
   dynamic "fixed_ip" {
     iterator = "fixed_ip_each"
     for_each = each.value.assign_fixed_ip == null || each.value.assign_fixed_ip ? [1] : []
-    content = {
+    content {
       subnet_id = each.value.subnet_id
       # if host_index is set within the addional_networks object, then use it (each.value.host_index). otherwise use the parent host index (var.host_index)
       # #coalesce: returns first value, that is not null or "" --> https://developer.hashicorp.com/terraform/language/functions/coalesce
