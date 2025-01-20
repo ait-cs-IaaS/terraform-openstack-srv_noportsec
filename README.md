@@ -49,7 +49,7 @@ module "datenverarbeitung" {
 
 ```
 
-### Dual-Homed Instance Instance
+### Dual-Homed Instance Instance with DHCP on all networks
 
 ```terraform
 module "datenverarbeitung" {
@@ -62,6 +62,7 @@ module "datenverarbeitung" {
   sshkey = var.sshkey
   network = var.network
   subnet = var.subnet
+  assign_fixed_ip = false
   host_address_index = var.host_address_index
   userdatafile = "${path.module}/scripts/default.yml"
   networks = {
@@ -69,6 +70,7 @@ module "datenverarbeitung" {
       network = var.network_2
       subnet = var.subnet_2
       host_address_index = var.host_address_index2
+      assign_fixed_ip = false
       access = null
     }
   }
