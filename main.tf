@@ -21,7 +21,7 @@ resource "openstack_networking_port_v2" "ports" {
   admin_state_up        = true  # default?
   port_security_enabled = false # default?
   dynamic "fixed_ip" {
-    iterator = "fixed_ip_each"
+    iterator = fixed_ip_each
     for_each = each.value.assign_fixed_ip == null || each.value.assign_fixed_ip ? [1] : []
     content {
       subnet_id = each.value.subnet_id
