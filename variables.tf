@@ -19,6 +19,7 @@ variable additional_networks {
       host_index = optional(string) # this is an optional parameter.
       network_id  = string
       subnet_id  = string
+      assign_fixed_ip = optional(bool)
     })
   )
   default = {}
@@ -42,4 +43,9 @@ variable "metadata_groups" {
 variable "metadata_company_info" {
   type = string
   default = ""
+}
+
+variable "assign_fixed_ip" {
+  type = bool
+  default = true
 }
