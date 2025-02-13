@@ -10,18 +10,18 @@ resource "openstack_networking_port_v2" "port" {
   }
 }
 
-# Create ports in child network(s)
+# Create ports in additional network(s)
 resource "openstack_networking_port_v2" "ports" {
   for_each = var.additional_networks
-  name = "port_${var.name}"
-  network_id = each.value.network_id
+  name = "port_${coalesce(each.value.name, var.name)}"
+  network_id = coalesce(each.value.network_id, var.network_id)
   admin_state_up = true # default?
   port_security_enabled = false # default?
   fixed_ip {
-    subnet_id = each.value.subnet_id
+    subnet_id = coalesce(each.value.subnet_id, var.subnet_id)
     # if host_index is set within the addional_networks object, then use it (each.value.host_index). otherwise use the parent host index (var.host_index)
-    # #coalesce: returns first value, that is not null or "" --> https://developer.hashicorp.com/terraform/language/functions/coalesce
-    ip_address = cidrhost(each.value.cidr, coalesce(each.value.host_index, var.host_index)) 
+    # coalesce: returns first value, that is not null or "" --> https://developer.hashicorp.com/terraform/language/functions/coalesce
+    ip_address = cidrhost(coalesce(each.value.cidr, var.cidr), coalesce(each.value.host_index, var.host_index)) 
   }
 }
 

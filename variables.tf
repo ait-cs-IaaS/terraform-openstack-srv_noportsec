@@ -14,11 +14,11 @@ variable "floating_ip" {
 variable additional_networks {
   type = map(
     object({
-      name = string
-      cidr = string
-      host_index = optional(string) # this is an optional parameter.
-      network_id  = string
-      subnet_id  = string
+      name = optional(string)
+      cidr = optional(string)
+      host_index = optional(string)
+      network_id  = optional(string)
+      subnet_id  = optional(string)
     })
   )
   default = {}
